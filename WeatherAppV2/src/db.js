@@ -2,6 +2,7 @@ const DB_NAME = "weather-db";
 const DB_VERSION = 1;
 const STORE_NAME = "weather"
 
+
 function openDatabase() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);

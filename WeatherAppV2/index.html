@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#1976d2">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Weather PWA</title>
+</head>
+
+<body>
+
+<main class="app">
+
+    <h1>Weather</h1>
+
+    <form id="weather-form">
+        <label for="city-input">City</label>
+
+        <div class="search-row">
+            <input
+                id="city-input"
+                type="text"
+                placeholder="Enter a city..."
+                required
+            >
+
+            <button type="submit">
+                Search
+            </button>
+        </div>
+    </form>
+
+    <p id="status"></p>
+
+    <section id="weather-card" class="weather-card hidden">
+
+        <h2 id="location"></h2>
+
+        <div class="main-weather">
+            <div>
+                <span id="temperature"></span>°F
+            </div>
+
+            <div id="description"></div>
+        </div>
+
+        <div class="weather-details">
+
+            <div>
+                <span>Feels like</span>
+                <strong id="feels-like"></strong>
+            </div>
+
+            <div>
+                <span>Humidity</span>
+                <strong id="humidity"></strong>
+            </div>
+
+            <div>
+                <span>Wind</span>
+                <strong id="wind"></strong>
+            </div>
+
+            <div>
+                <span>Pressure</span>
+                <strong id="pressure"></strong>
+            </div>
+
+        </div>
+
+        <p id="data-source"></p>
+
+    </section>
+
+</main>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

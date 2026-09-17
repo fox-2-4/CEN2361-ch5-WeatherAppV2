@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f2f4f7;
+}
+
+.app {
+    width: min(600px, 90%);
+    margin: 3rem auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.search-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+input {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+.weather-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+}
+
+.main-weather {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#temperature {
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+#description {
+    font-size: 1.2rem;
+    text-transform: capitalize;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.weather-details div {
+    padding: 1rem;
+    background: #f2f4f7;
+    border-radius: 8px;
+}
+
+.weather-details span {
+    display: block;
+    font-size: 0.85rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#status {
+    margin-top: 1rem;
+}

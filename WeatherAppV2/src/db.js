@@ -3,7 +3,7 @@ const DB_VERSION = 1;
 const STORE_NAME = "weather"
 
 
-function openDatabase() {
+function openWeatherDB() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
         request.onerror = () => { reject(request.error); };
@@ -20,8 +20,8 @@ function openDatabase() {
     });
 }
 
-async function storeWeather(city, data) {
-    const db = await openDatabase();
+async function storeWeatherToDB(city, data) {
+    const db = await openWeatherDB();
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(STORE_NAME, "readwrite");
         const store = transaction.objectStore(STORE_NAME);
@@ -32,8 +32,8 @@ async function storeWeather(city, data) {
     });
 }
 
-async function getWeather(city) {
-    const db = await openDatabase();
+async function getWeatherFromDB(city) {
+    const db = await openWeatherDB();
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(STORE_NAME, "readonly");
         const store = transaction.objectStore(STORE_NAME);

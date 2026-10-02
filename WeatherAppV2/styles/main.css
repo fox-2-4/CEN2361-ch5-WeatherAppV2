@@ -55,19 +55,18 @@ button {
     text-transform: capitalize;
 }
 
-.weather-details {
+
+.detailed-weather {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-
-.weather-details div {
+.detailed-weather div {
     padding: 1rem;
     background: #f2f4f7;
     border-radius: 8px;
 }
-
-.weather-details span {
+.detailed-weather span {
     display: block;
     font-size: 0.85rem;
 }
@@ -78,4 +77,9 @@ button {
 
 #status {
     margin-top: 1rem;
+}
+
+#data-source {
+    font-size: 1rem;
+    font-style: italic;
 }

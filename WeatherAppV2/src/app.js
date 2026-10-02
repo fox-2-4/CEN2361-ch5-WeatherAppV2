@@ -1,8 +1,4 @@
-const API_KEY = "716aaa19bbe548488ba1bf6466833cf8";
-const API_URL = "https://api.weatherbit.io/v2.0/current";
-
-
-const form = document.querySelector("#weather-form");
+const cityForm = document.querySelector("#city-form");
 const cityInput = document.querySelector("#city-input");
 
 const statusElement = document.querySelector("#status");
@@ -21,29 +17,14 @@ const pressureElement = document.querySelector("#pressure");
 const dataSourceElement = document.querySelector("#data-source");
 
 
-async function fetchWeather(city) {
-    const url = new URL(API_URL);
-    url.searchParams.set("key", API_KEY);
-    url.searchParams.set("city", city);
-    url.searchParams.set("units", "I");
-
-    const response = await fetch(url);
-    if (!response.ok) { throw new Error(`Weather API returned ${response.status}`); }
-    const json = await response.json();
-
-    if (!json.data || json.data.length === 0) { throw new Error("No weather data found."); }
-    return json.data[0];
-}
-
-
-function displayWeather(weather, source) {
-    locationElement.textContent = `${weather.city_name}, ${weather.state_code ?? weather.country_code}`;
-    temperatureElement.textContent = Math.round(weather.temp);
-    descriptionElement.textContent = weather.weather.description;
-    feelsLikeElement.textContent = `${Math.round(weather.app_temp)}°F`;
-    humidityElement.textContent = `${weather.rh}%`;
-    windElement.textContent = `${weather.wind_spd} mph ${weather.wind_cdir}`;
-    pressureElement.textContent = `${weather.pres} mb`;
+function displayWeather(data, source) {
+    locationElement.textContent = `${data.city_name}, ${data.state_code ?? data.country_code}`;
+    temperatureElement.textContent = Math.round(data.temp);
+    descriptionElement.textContent = data.weather.description;
+    feelsLikeElement.textContent = `${Math.round(data.app_temp)}°F`;
+    humidityElement.textContent = `${data.rh}%`;
+    windElement.textContent = `${data.wind_spd} mph ${data.wind_cdir}`;
+    pressureElement.textContent = `${data.pres} mb`;
     dataSourceElement.textContent = source;
     weatherCard.classList.remove("hidden");
 }
@@ -53,29 +34,30 @@ async function loadWeather(city) {
     statusElement.textContent = "Loading...";
     
     try {
-        const weather = await fetchWeather(city);
-        await saveWeather(city, weather);
-        displayWeather(weather, "Live data from Weatherbit");
+        const data = await fetchWeatherFromAPI(city);
+        await storeWeatherToDB(city, data);
+        displayWeather(data, "Live data from Weatherbit.io");
         statusElement.textContent = "";
     }
     catch (error) {
         console.error(error);
+        statusElement.textContent = "Fetching from cache...";
         try {
-            const cached = await getWeather(city);
+            const cached = await getWeatherFromDB(city);
             if (!cached) { throw new Error("No cached weather exists."); }
             displayWeather(cached.data, `Cached data from ${new Date(cached.timestamp).toLocaleString()}`);
-            statusElement.textContent = "Could not retrieve live weather. Showing cached data.";
+            statusElement.textContent = "Could not retrieve live data. Displaying cached.";
         }
         catch (cacheError) {
             console.error(cacheError);
             weatherCard.classList.add("hidden");
-            statusElement.textContent = "Unable to retrieve weather and no cached data is available.";
+            statusElement.textContent = "Could not retrieve live data and cached not available.";
         }
     }
 }
 
 
-form.addEventListener("submit", async (event) => {
+cityForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const city = cityInput.value.trim().toLowerCase();
     if (!city) { return; }
@@ -84,19 +66,9 @@ form.addEventListener("submit", async (event) => {
 
 
 if ("serviceWorker" in navigator) {
-
     window.addEventListener("load", () => {
-
         navigator.serviceWorker.register("./sw.js")
-            .then(() => {
-                console.log("Service worker registered.");
-            })
-            .catch(error => {
-                console.error(
-                    "Service worker registration failed:",
-                    error
-                );
-            });
-
+            .then(() => { console.log("Service worker registered."); })
+            .catch(error => { console.error("Service worker registration failed:", error); });
     });
 }
